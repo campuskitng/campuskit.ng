@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Dark-mode color tokens. Referenced from tailwind.config.ts via
+ * rgb(var(--x) / <alpha-value>), so every existing `bg-canvas`, `text-ink`,
+ * `border-hairline`, `bg-brand-soft` class in the app already respects
+ * whichever block is active — no component changes needed. next-themes
+ * toggles the `dark` class on <html> (see components/ThemeProvider.tsx).
+ */
+:root {
+  --color-canvas: 248 249 251;
+  --color-surface: 255 255 255;
+  --color-ink: 17 24 39;
+  --color-muted: 107 114 128;
+  --color-hairline: 229 231 235;
+  --color-brand-soft: 238 237 255;
+}
+
+.dark {
+  --color-canvas: 15 23 42;
+  --color-surface: 30 41 59;
+  --color-ink: 248 250 252;
+  --color-muted: 148 163 184;
+  --color-hairline: 51 65 85;
+  --color-brand-soft: 46 42 102;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-canvas text-ink font-sans text-body antialiased;
+  }
+
+  /* Visible, consistent keyboard focus everywhere. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand ring-offset-2 ring-offset-canvas;
+  }
+
+  ::selection {
+    @apply bg-brand-soft text-ink;
+  }
+}
+
+@layer components {
+  /* Page shell: one horizontal rhythm for every section. */
+  .shell {
+    @apply mx-auto w-full max-w-shell px-5 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply text-meta font-semibold uppercase tracking-wider;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-label font-medium text-ink;
+  }
+
+  .field-input {
+    @apply w-full rounded-control border border-hairline bg-surface px-3 py-2.5 text-body
+      text-ink shadow-control placeholder:text-muted/70
+      focus:border-brand focus:ring-2 focus:ring-brand/25;
+  }
+
+  .row-link {
+    @apply flex items-center gap-3 rounded-control px-3 py-3 text-left transition-colors
+      hover:bg-brand-soft/60 active:bg-brand-soft;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Horizontal mock scrollers keep their own rhythm without visible scrollbars. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
